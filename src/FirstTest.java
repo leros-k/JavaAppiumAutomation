@@ -131,6 +131,23 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testCompareSearchField(){
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        checkText(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search field",
+                5,
+                "We see unexpected title",
+                "Search…"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeInSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeInSeconds);
         wait.withMessage(error_message + "\n");
@@ -166,6 +183,13 @@ public class FirstTest {
     private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds){
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
+        return element;
+    }
+
+    private WebElement checkText(By by, String error_message, long timeoutInSeconds, String message, String expected){
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        String search_title = element.getAttribute("text");
+        Assert.assertEquals(message, expected, search_title);
         return element;
     }
 }
