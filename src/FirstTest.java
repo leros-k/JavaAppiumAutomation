@@ -148,6 +148,57 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testSearchAndCancel(){
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                5
+        );
+
+        checkText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Island of Indonesia']"),
+                "Cannot find 'Island of Indonesia' topic searching by Java",
+                5,
+                "We wait for topic of island",
+                "Island of Indonesia"
+        );
+
+        checkText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Java version history']"),
+                "Cannot find 'Java version history' topic searching by Java",
+                5,
+                "We wait for topic of Java history",
+                "Java version history"
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find X to cancel search",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Java version history']"),
+                "'Java version history' topic is still present on the page",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Island of Indonesia']"),
+                "'Java version history' topic is still present on the page",
+                5
+        );
+
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeInSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeInSeconds);
         wait.withMessage(error_message + "\n");
