@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -199,6 +200,28 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void checkWordInSearch(){
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                5
+        );
+        checkWordInSearchResult(
+                By.id("org.wikipedia:id/page_list_item_container"),
+                "Java is not contains in each results",
+                5
+        );
+
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeInSeconds){
         WebDriverWait wait = new WebDriverWait(driver, timeInSeconds);
         wait.withMessage(error_message + "\n");
@@ -207,7 +230,7 @@ public class FirstTest {
         );
     }
 
-    private WebElement waitForElementNotPresent(By by, String error_message){
+    private WebElement waitForElementPresent(By by, String error_message){
         return waitForElementPresent(by, error_message, 5);
     }
 
@@ -242,5 +265,12 @@ public class FirstTest {
         String search_title = element.getAttribute("text");
         Assert.assertEquals(message, expected, search_title);
         return element;
+    }
+
+    private WebElement checkWordInSearchResult(By by, String error_message, long timeoutInSeconds){
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        String search_title = element.getAttribute("text");
+        Assert.assertTrue((search_title.contains("Java")));
+            return element;
     }
 }
