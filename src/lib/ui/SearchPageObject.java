@@ -11,7 +11,14 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
+            SEARCH_TITLE_FOR_COMPARE = "org.wikipedia:id/search_src_text",
+            SEARCH_WORD = "org.wikipedia:id/page_list_item_container",
+            FIRST_SEARCH = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Island of Indonesia']",
+            SECOND_SEARCH = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Java version history']",
+            CLOSE_SEARCH = "org.wikipedia:id/search_close_btn";
+
+
 
     public SearchPageObject(AppiumDriver driver){
 
@@ -19,7 +26,7 @@ public class SearchPageObject extends MainPageObject{
     }
 
     /* TEMPLATES METHODS */
-    private static String getResaultSearchElement(String substring){
+    private static String getResultSearchElement(String substring){
 
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
@@ -41,7 +48,7 @@ public class SearchPageObject extends MainPageObject{
         this.waitForElementNotPresent(By.id(SEARCH_CANCEL_BUTTON), "Search cancel button is still present", 5);
     }
 
-    public void clickCanselSearch(){
+    public void clickCancelSearch(){
 
         this.waitForElementAndClick(By.id(SEARCH_CANCEL_BUTTON), "Cannot find and click search cancel button", 5);
     }
@@ -53,13 +60,13 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForSearchResult(String substring){
 
-        String search_result_xpath = getResaultSearchElement(substring);
+        String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementPresent(By.xpath(search_result_xpath), "Cannot find search result with substring " + substring);
     }
 
     public void clickByArticleWithSubstring(String substring){
 
-        String search_result_xpath = getResaultSearchElement(substring);
+        String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementAndClick(By.xpath(search_result_xpath), "Cannot find and click search result with substring " + substring, 10);
     }
 
@@ -79,5 +86,27 @@ public class SearchPageObject extends MainPageObject{
 
     public void assertThereIsNoResultOfSearch(){
         this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not to find any results");
+    }
+
+    public void assertCheckText(){
+        this.checkText(By.id(SEARCH_TITLE_FOR_COMPARE), "Cannot find search field",5, "We see unexpected title", "Search…");
+    }
+
+    public void checkDoubleSearch(){
+        this.checkText(By.xpath(FIRST_SEARCH), "Cannot find 'Island of Indonesia' topic searching by Java", 5, "We wait for topic of island", "Island of Indonesia");
+        this.checkText(By.xpath(SECOND_SEARCH), "Cannot find 'Java version history' topic searching by Java", 5, "We wait for topic of Java history", "Java version history");
+    }
+
+    public void closeSearch(){
+        this.waitForElementAndClick(By.id(CLOSE_SEARCH), "Cannot find X to cancel search", 5);
+    }
+
+    public void bothSearchNotPresent(){
+        this.waitForElementNotPresent(By.xpath(FIRST_SEARCH), "'Island of Indonesia' is still present", 5);
+        this.waitForElementNotPresent(By.xpath(SECOND_SEARCH), "'Java version history' is still present", 5);
+    }
+
+    public void checkWordInSearch(){
+        this.checkWordInSearchResult(By.id(SEARCH_WORD), "Java is not contains in each results", 5);
     }
 }

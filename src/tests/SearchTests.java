@@ -1,8 +1,10 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 public class SearchTests extends CoreTestCase {
 
@@ -23,7 +25,7 @@ public class SearchTests extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.waitForCancelButtonToAppear();
-        SearchPageObject.clickCanselSearch();
+        SearchPageObject.clickCancelSearch();
         SearchPageObject.waitForCancelButtonToDisappear();
     }
 
@@ -51,5 +53,68 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_line);
         SearchPageObject.waitForEmptyResultsLabel();
         SearchPageObject.assertThereIsNoResultOfSearch();
+    }
+
+    @Test
+    public void testCompareSearchField(){
+
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        SearchPageObject.assertCheckText();
+    }
+
+    @Test
+    public void testSearchAndCancel(){
+
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        String search_line = "Java";
+        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.checkDoubleSearch();
+        SearchPageObject.closeSearch();
+        SearchPageObject.bothSearchNotPresent();
+
+    }
+
+    @Test
+    public void testCheckWordInSearch(){
+
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
+        String search_line = "Java";
+        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.checkWordInSearch();
+    }
+
+    @Test
+    public void testAssertTitle(){
+
+        MainPageObject.waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        String search_line = "Italy";
+
+        MainPageObject.waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_line,
+                "Cannot find search input",
+                5
+        );
+
+        MainPageObject.waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Republic in Southern Europe']"),
+                "Cannot find 'Republic in Southern Europe' topic searching by Italy",
+                20
+        );
+
+        String search_title = "//*[@resource-id='org.wikipedia:id/view_page_title_text']";
+
+        MainPageObject.assertElementPresent(
+                By.xpath(search_title),
+                "We've found some results by request " + search_title
+        );
     }
 }
