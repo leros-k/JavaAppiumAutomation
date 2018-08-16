@@ -39,4 +39,26 @@ public class ArticleTests extends CoreTestCase {
         ArticlePageObject.waitForTitleElement();
         ArticlePageObject.swipeToFooter();
     }
+
+    @Test
+    public void testSaveTwoArticlesAndDelete(){
+
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Italy");
+        SearchPageObject.initAssertTitle();
+        SearchPageObject.elementPresent();
+
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject.addArticleToMyList("Learning countries");
+        ArticlePageObject.closeArticle();
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Spain");
+        SearchPageObject.initTitle();
+        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.openOptions();
+        ArticlePageObject.deleteArticle();
+    }
 }

@@ -92,8 +92,7 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
         SearchPageObject.initSearchInput();
-        String search_line = "Italy";
-        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.typeSearchLine("Italy");
         SearchPageObject.initAssertTitle();
         SearchPageObject.assertElementPresent();
     }

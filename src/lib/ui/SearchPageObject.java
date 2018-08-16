@@ -18,7 +18,9 @@ public class SearchPageObject extends MainPageObject{
             SECOND_SEARCH = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Java version history']",
             CLOSE_SEARCH = "org.wikipedia:id/search_close_btn",
             SEARCH_TITLE = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Republic in Southern Europe']",
-            SEARCH_TITLE_ASSERT = "//*[@resource-id='org.wikipedia:id/view_page_title_text']";
+            SEARCH_TITLE_ASSERT = "//*[@resource-id='org.wikipedia:id/view_page_title_text']",
+            SEARCH_TITLE_INIT = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Constitutional monarchy in Southwest Europe']",
+            SEARCH_ELEMENT_PRESENT = "org.wikipedia:id/view_page_title_text";
 
 
     public SearchPageObject(AppiumDriver driver){
@@ -117,5 +119,17 @@ public class SearchPageObject extends MainPageObject{
 
     public void assertElementPresent(){
         this.assertElementPresent(By.xpath(SEARCH_TITLE_ASSERT), "We've found some results by request " + SEARCH_TITLE_ASSERT);
+    }
+
+    public void initTitle(){
+        this.waitForElementAndClick(By.xpath(SEARCH_TITLE_INIT), "Cannot find 'Constitutional monarchy in Southwest Europe' topic searching by Spain", 5);
+    }
+
+    public void elementPresent(){
+        this.waitForElementPresent(
+                By.id(SEARCH_ELEMENT_PRESENT),
+                "Cannot find article title",
+                15
+        );
     }
 }

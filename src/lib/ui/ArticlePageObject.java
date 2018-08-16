@@ -89,4 +89,71 @@ public class ArticlePageObject extends MainPageObject{
                 5
         );
     }
+
+    public void openOptions(){
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "Cannot find button to open article options",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                "Cannot find option to add article to reading list",
+                5
+        );
+    }
+
+    public void deleteArticle(){
+        this.waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/item_container']//*[@text='Learning countries']"),
+                "Cannot find 'Learning countries' list",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Cannot close article, cannot find X link",
+                15
+        );
+
+        this.waitForElementAndClick(
+                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
+                "Cannot find navigation button to My list",
+                5
+        );
+
+        String name_of_folder = "Learning countries";
+
+        this.waitForElementAndClick(
+                By.xpath("//*[@text='" + name_of_folder + "']"),
+                "Cannot find created folder",
+                5
+        );
+
+        this.swipeElementToLeft(
+                By.xpath("//*[@text='Spain']"),
+                "Cannot find saved article"
+        );
+
+        this.waitForElementPresent(
+                By.xpath("//*[@text='republic in Southern Europe']"),
+                "Republic in Southern Europe' topic is still present",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='republic in Southern Europe']"),
+                "Cannot find 'republic in Southern Europe' topic searching by Italy",
+                5
+        );
+
+        this.checkText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']//*[@text='Italy']"),
+                "Cannot find 'Italy' title",
+                10,
+                "We wait for title 'Italy'",
+                "Italy"
+        );
+    }
 }
