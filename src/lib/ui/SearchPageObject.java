@@ -16,8 +16,9 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_WORD = "org.wikipedia:id/page_list_item_container",
             FIRST_SEARCH = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Island of Indonesia']",
             SECOND_SEARCH = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Java version history']",
-            CLOSE_SEARCH = "org.wikipedia:id/search_close_btn";
-
+            CLOSE_SEARCH = "org.wikipedia:id/search_close_btn",
+            SEARCH_TITLE = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Republic in Southern Europe']",
+            SEARCH_TITLE_ASSERT = "//*[@resource-id='org.wikipedia:id/view_page_title_text']";
 
 
     public SearchPageObject(AppiumDriver driver){
@@ -108,5 +109,13 @@ public class SearchPageObject extends MainPageObject{
 
     public void checkWordInSearch(){
         this.checkWordInSearchResult(By.id(SEARCH_WORD), "Java is not contains in each results", 5);
+    }
+
+    public void initAssertTitle(){
+        this.waitForElementAndClick(By.xpath(SEARCH_TITLE),"Cannot find 'Republic in Southern Europe' topic searching by Italy", 20);
+    }
+
+    public void assertElementPresent(){
+        this.assertElementPresent(By.xpath(SEARCH_TITLE_ASSERT), "We've found some results by request " + SEARCH_TITLE_ASSERT);
     }
 }

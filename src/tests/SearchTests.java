@@ -89,32 +89,12 @@ public class SearchTests extends CoreTestCase {
     @Test
     public void testAssertTitle(){
 
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot find 'Search Wikipedia' input",
-                5
-        );
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
+        SearchPageObject.initSearchInput();
         String search_line = "Italy";
-
-        MainPageObject.waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                search_line,
-                "Cannot find search input",
-                5
-        );
-
-        MainPageObject.waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Republic in Southern Europe']"),
-                "Cannot find 'Republic in Southern Europe' topic searching by Italy",
-                20
-        );
-
-        String search_title = "//*[@resource-id='org.wikipedia:id/view_page_title_text']";
-
-        MainPageObject.assertElementPresent(
-                By.xpath(search_title),
-                "We've found some results by request " + search_title
-        );
+        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.initAssertTitle();
+        SearchPageObject.assertElementPresent();
     }
 }
