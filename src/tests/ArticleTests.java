@@ -1,13 +1,20 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
+import lib.ui.MyListsPageObject;
+import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MyListsPageObjectFactory;
+import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class ArticleTests extends CoreTestCase {
+
+    private final static String name_of_folder = "Learning countries";
 
     @Test
     public void testCompareArticleTitle(){
@@ -49,18 +56,32 @@ public class ArticleTests extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Italy");
-        SearchPageObject.initAssertTitle();
-        SearchPageObject.elementPresent();
+        SearchPageObject.clickByArticleWithSubstring("Republic in Southern Europe");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        ArticlePageObject.addArticleToMyList("Learning countries");
+        ArticlePageObject.waitForTitleElement();
+        String article_title = ArticlePageObject.getArticleTitle();
+
+        if(Platform.getInstance().isAndoid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticlesToMySaved();
+        }
         ArticlePageObject.closeArticle();
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Spain");
-        SearchPageObject.initTitle();
+        SearchPageObject.clickByArticleWithSubstring("Constitutional monarchy in Southwest Europe");
         ArticlePageObject.waitForTitleElement();
-        ArticlePageObject.openOptions();
-        ArticlePageObject.deleteArticle();
+
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.clickMyLists();
+
+        MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
+
+        if (Platform.getInstance().isAndoid()){
+            MyListsPageObject.openFolderByName(name_of_folder);
+        }
+        MyListsPageObject.swipeByArticleToDelete(article_title);
     }
 }
